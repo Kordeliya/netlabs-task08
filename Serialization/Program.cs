@@ -78,44 +78,7 @@ namespace Serialization
             }
         }
 
-        /// <summary>
-        /// Получение списка клиентов в соответствии с введенным фильтром
-        /// </summary>
-        /// <param name="filter">фильтр</param>
-        /// <param name="_nameFile">имя файла где хранится список</param>
-        /// <returns></returns>
-        private static List<Client> GetFiltredClients(Client filter, string nameFile)
-        {
-            List<Client> result = new List<Client>();
-            try
-            {
-                using (FileStream file = new FileStream(nameFile, FileMode.Open))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<Bank>));
-                    var banks = (List<Bank>)serializer.Deserialize(file);
-                    if (!String.IsNullOrEmpty(filter.NameBank))
-                        banks = (List<Bank>)banks.Where(b => b.Name.ToLower().StartsWith(filter.NameBank.ToLower())).ToList();
-
-                    foreach (var bank in banks)
-                        result.AddRange(bank.Clients);
-
-                    if(!String.IsNullOrEmpty(filter.LastName))
-                        result = result.Where(c => c.LastName.ToLower().StartsWith(filter.LastName.ToLower())).ToList();
-                    if(!String.IsNullOrEmpty(filter.FirstName))
-                        result = result.Where(c => c.FirstName.ToLower().StartsWith(filter.FirstName.ToLower())).ToList();
-                    if (!String.IsNullOrEmpty(filter.MiddleName))
-                        result = result.Where(c => c.MiddleName.ToLower().StartsWith(filter.MiddleName.ToLower())).ToList();
-                    if (!String.IsNullOrEmpty(filter.NameBank))
-                        result = result.Where(c => c.NameBank.ToLower().StartsWith(filter.NameBank.ToLower())).ToList();
-
-                    return result.ToList();
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }            
-        }
+  
 
         /// <summary>
         /// Запрос фильтра
