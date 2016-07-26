@@ -10,6 +10,7 @@ namespace Entities
     /// <summary>
     /// Класс для описания сущности Банк
     /// </summary>
+    [Serializable]
     public class Client
     {
         /// <summary>
