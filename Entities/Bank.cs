@@ -12,6 +12,7 @@ namespace Entities
     [Serializable]
     public class Bank
     {
+
         /// <summary>
         /// Название банка
         /// </summary>

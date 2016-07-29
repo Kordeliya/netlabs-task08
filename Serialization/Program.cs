@@ -26,7 +26,8 @@ namespace Serialization
                     if (!File.Exists(_nameInputFile))
                         HelperForTest.CreateTestInputFile(_nameInputFile);
                     Client filter = FilterRequest();
-                    List<Client> result = GetFiltredClients(filter, _nameInputFile);
+                    List<Client> result = new List<Client>();
+                        //GetFiltredClients(filter, _nameInputFile);
                     if (result.Count > 0)
                     {
                         foreach (var client in result)

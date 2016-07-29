@@ -33,17 +33,20 @@ namespace DAL
             Bank seekingBank = null;
             List<Bank> banks = this.ReadListBank().ToList();
             if (banks.Count() > 0)
+            {
                 seekingBank = banks.Where(b => b.Name == client.NameBank).FirstOrDefault();
+            }
             if (seekingBank != null)
             {
                 seekingBank.Clients.Add(client);
                 WorkerWithXmlFile.Write<Bank>(banks, InputFile);
             }
             else
+            {
                 throw new RepositoryException("Не существует указанного банка");
+            }
 
         }
-
 
         /// <summary>
         /// Создание нового банка
@@ -52,15 +55,23 @@ namespace DAL
         public void CreateNewBank(Bank bank)
         {
             Bank seekingBank = null;
-            List<Bank> banks = this.ReadListBank().ToList();
-            if (banks.Count() > 0)
+            var banks = this.ReadListBank();
+            if (banks != null && banks.Count() > 0)
+            {
                 seekingBank = banks.Where(b => b.Name == bank.Name).FirstOrDefault();
+            }
+            else
+            {
+                banks = new List<Bank>();
+            }
 
             if (seekingBank != null)
+            {
                 throw new RepositoryException("Существует банк с таким названием");
+            }
 
             banks.Add(bank);
-            WorkerWithXmlFile.Write<Bank>(banks, InputFile);
+            WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
         }
 
         /// <summary>
@@ -76,19 +87,34 @@ namespace DAL
             {
                 var banks = WorkerWithXmlFile.Read<Bank>(InputFile);
                 if (!String.IsNullOrEmpty(filter.NameBank))
+                {
                     banks = (IQueryable<Bank>)banks.Where(b => b.Name.ToLower().StartsWith(filter.NameBank.ToLower()));
+                }
 
                 foreach (var bank in banks)
+                {
                     clients.AddRange(bank.Clients);
+                }
                 result = clients.AsQueryable();
-                if (!String.IsNullOrEmpty(filter.LastName))
-                    result = result.Where(c => c.LastName.ToLower().StartsWith(filter.LastName.ToLower()));
-                if (!String.IsNullOrEmpty(filter.FirstName))
-                    result = result.Where(c => c.FirstName.ToLower().StartsWith(filter.FirstName.ToLower()));
-                if (!String.IsNullOrEmpty(filter.MiddleName))
-                    result = result.Where(c => c.MiddleName.ToLower().StartsWith(filter.MiddleName.ToLower()));
-                if (!String.IsNullOrEmpty(filter.NameBank))
-                    result = result.Where(c => c.NameBank.ToLower().StartsWith(filter.NameBank.ToLower()));
+                if (filter != null)
+                {
+                    if (!String.IsNullOrEmpty(filter.LastName))
+                    {
+                        result = result.Where(c => c.LastName.ToLower().StartsWith(filter.LastName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(filter.FirstName))
+                    {
+                        result = result.Where(c => c.FirstName.ToLower().StartsWith(filter.FirstName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(filter.MiddleName))
+                    {
+                        result = result.Where(c => c.MiddleName.ToLower().StartsWith(filter.MiddleName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(filter.NameBank))
+                    {
+                        result = result.Where(c => c.NameBank.ToLower().StartsWith(filter.NameBank.ToLower()));
+                    }
+                }
 
                 return result.ToList();
             }
@@ -107,19 +133,90 @@ namespace DAL
         {
             IQueryable<Bank> banks = WorkerWithXmlFile.Read<Bank>(InputFile);
 
-            if (banks != null && !String.IsNullOrEmpty(filter.Name))
+            if (banks != null && filter != null && !String.IsNullOrEmpty(filter.Name))
+            {
                 banks = banks.Where(c => c.Name.ToLower().StartsWith(filter.Name.ToLower()));
-            return banks.ToList();
+            }
+            return banks != null ? banks.ToList() : null;
         }
 
-        public void UpdateClient(Client filter)
+        public void UpdateClient(Client oldClient, Client newClient)
         {
-            throw new NotImplementedException();
+            IQueryable<Client> result;
+            List<Client> clients = new List<Client>();
+            try
+            {
+                var banks = WorkerWithXmlFile.Read<Bank>(InputFile);
+
+                foreach (var bank in banks)
+                {
+                    clients.AddRange(bank.Clients);
+                }
+                result = clients.AsQueryable();
+                if (oldClient != null)
+                {
+                    if (!String.IsNullOrEmpty(oldClient.LastName))
+                    {
+                        result = result.Where(c => c.LastName.ToLower().StartsWith(oldClient.LastName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(oldClient.FirstName))
+                    {
+                        result = result.Where(c => c.FirstName.ToLower().StartsWith(oldClient.FirstName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(oldClient.MiddleName))
+                    {
+                        result = result.Where(c => c.MiddleName.ToLower().StartsWith(oldClient.MiddleName.ToLower()));
+                    }
+                    if (!String.IsNullOrEmpty(oldClient.NameBank))
+                    {
+                        result = result.Where(c => c.NameBank.ToLower().StartsWith(oldClient.NameBank.ToLower()));
+                    }
+                }
+                if (result != null)
+                {
+                    var client = result.FirstOrDefault();
+                    if (client != null)
+                    {
+                        client = newClient;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new RepositoryException("Ошибка при обновлении данных клиента");
+            }
         }
 
-        public void UpdateBank(Bank filter)
+        public void UpdateBank(Bank oldBank, Bank newBank)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Bank seekingBank = null;
+                var banks = this.ReadListBank();
+                if (banks != null && banks.Count() > 0)
+                {
+                    seekingBank = banks.Where(b => b.Name == oldBank.Name).FirstOrDefault();
+                }
+                else
+                {
+                    banks = new List<Bank>();
+                }
+
+                if (seekingBank != null)
+                {
+                    seekingBank = newBank;
+                    WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
+                }
+                else
+                {
+                    throw new RepositoryException("Не существует указанного банка");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryException("Ошибка при обновлении данных банка");
+            }
         }
 
         public void DeleteClient(Client client)
@@ -127,7 +224,9 @@ namespace DAL
             Bank seekingBank = null;
             List<Bank> banks = this.ReadListBank().ToList();
             if (banks.Count() > 0)
+            {
                 seekingBank = banks.Where(b => b.Name == client.NameBank).FirstOrDefault();
+            }
             if (seekingBank != null)
             {
                 seekingBank.Clients.Remove(client);
@@ -140,10 +239,14 @@ namespace DAL
             Bank seekingBank = null;
             List<Bank> banks = this.ReadListBank().ToList();
             if (banks.Count() > 0)
+            {
                 seekingBank = banks.Where(b => b.Name == bank.Name).FirstOrDefault();
+            }
 
             if (seekingBank == null)
+            {
                 throw new RepositoryException("Не существует банк с таким названием");
+            }
 
             banks.Remove(bank);
             WorkerWithXmlFile.Write<Bank>(banks, InputFile);

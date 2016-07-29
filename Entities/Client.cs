@@ -13,6 +13,7 @@ namespace Entities
     [Serializable]
     public class Client
     {
+
         /// <summary>
         /// Фамилия
         /// </summary>

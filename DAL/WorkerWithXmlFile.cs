@@ -24,12 +24,14 @@ namespace DAL
                 using (FileStream fileStream = new FileStream(file, FileMode.Open))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-                    result = (IQueryable<T>)serializer.Deserialize(fileStream);
+                    result = ((List<T>)serializer.Deserialize(fileStream)).AsQueryable();
                 }
                 return result;
             }
             else
-                throw new FileNotFoundException();
+            {
+                return null;
+            }
         }
 
 
