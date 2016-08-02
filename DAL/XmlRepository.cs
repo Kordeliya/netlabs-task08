@@ -139,7 +139,12 @@ namespace DAL
             }
             return banks != null ? banks.ToList() : null;
         }
-
+        
+        /// <summary>
+        /// Обновление данных о клиенте
+        /// </summary>
+        /// <param name="oldClient"></param>
+        /// <param name="newClient"></param>
         public void UpdateClient(Client oldClient, Client newClient)
         {
             IQueryable<Client> result;
@@ -177,7 +182,11 @@ namespace DAL
                     var client = result.FirstOrDefault();
                     if (client != null)
                     {
-                        client = newClient;
+                        client.FirstName = newClient.FirstName;
+                        client.LastName = newClient.LastName;
+                        client.MiddleName = newClient.MiddleName;
+                        client.NameBank = newClient.NameBank;
+                        client.BirthDay = newClient.BirthDay;
                     }
                 }
             }
@@ -187,6 +196,11 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Обновление данных о Банке
+        /// </summary>
+        /// <param name="oldBank"></param>
+        /// <param name="newBank"></param>
         public void UpdateBank(Bank oldBank, Bank newBank)
         {
             try
@@ -204,7 +218,7 @@ namespace DAL
 
                 if (seekingBank != null)
                 {
-                    seekingBank = newBank;
+                    seekingBank.Name = newBank.Name;
                     WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
                 }
                 else
@@ -219,6 +233,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Удаление клиента
+        /// </summary>
+        /// <param name="client"></param>
         public void DeleteClient(Client client)
         {
             Bank seekingBank = null;
@@ -234,6 +252,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Удаление банка
+        /// </summary>
+        /// <param name="bank"></param>
         public void DeleteBank(Bank bank)
         {
             Bank seekingBank = null;
