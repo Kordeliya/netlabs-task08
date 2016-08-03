@@ -80,13 +80,13 @@ namespace BuisnessLogic
         /// <summary>
         /// Удаление банка
         /// </summary>
-        /// <param name="bank"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteBank(Bank bank)
+        public bool DeleteBank(Guid id)
         {
             try
             {
-                _repository.DeleteBank(bank);
+                _repository.DeleteBank(id);
                 return true;
             }
             catch (RepositoryException ex)
@@ -98,13 +98,13 @@ namespace BuisnessLogic
         /// <summary>
         /// Удаление клиента
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteClient(Client client)
+        public bool DeleteClient(Guid id)
         {
             try
             {
-                _repository.DeleteClient(client);
+                _repository.DeleteClient(id);
                 return true;
             }
             catch (RepositoryException ex)
@@ -116,13 +116,13 @@ namespace BuisnessLogic
         /// <summary>
         /// Обновление банка
         /// </summary>
-        /// <param name="bank"></param>
+        /// <param name="newBank"></param>
         /// <returns></returns>
-        public bool UpdateBank(Bank oldBank, Bank newBank)
+        public bool UpdateBank(Bank newBank)
         {
             try
             {
-                _repository.UpdateBank(oldBank, newBank);
+                _repository.UpdateBank(newBank);
                 return true;
             }
             catch (RepositoryException ex)
@@ -134,13 +134,13 @@ namespace BuisnessLogic
         /// <summary>
         /// Обновление клиента
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="newClient"></param>
         /// <returns></returns>
-        public bool UpdateClient(Client oldClient, Client newClient)
+        public bool UpdateClient(Client newClient)
         {
             try
             {
-                _repository.UpdateClient(oldClient, newClient);
+                _repository.UpdateClient(newClient);
                 return true;
             }
             catch (RepositoryException ex)

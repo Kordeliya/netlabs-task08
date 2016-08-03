@@ -12,6 +12,7 @@ namespace UIBank.Controllers
     public class BankController : Controller
     {
         LogicBankSystem _logic;
+        List<Bank> _banksModel;
         public BankController()
         {
             var file = ConfigurationManager.AppSettings["FileRepository"];
@@ -20,20 +21,70 @@ namespace UIBank.Controllers
 
         public ActionResult Index()
         {
-            var model = _logic.GetListBank();
-            return View(model);
+            _banksModel = _logic.GetListBank();
+            return View("Index", _banksModel);
         }
 
-        public ActionResult DeleteBank(Bank bank)
+
+        public ActionResult AddBank()
         {
-            _logic.DeleteBank(bank);
+            return View(new Bank());
+        }
+
+        [HttpPost]
+        public ActionResult AddBank(Bank model)
+        {
+            try
+            {
+                _logic.AddNewBank(model);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+
+                Exception inner = e.InnerException;
+
+                while (inner != null)
+                {
+                    ModelState.AddModelError(string.Empty, inner.Message);
+                    inner = inner.InnerException;
+                }
+            }
+            return View();
+        }
+        public ActionResult DeleteBank(Guid id)
+        {
+            _logic.DeleteBank(id);
             return Index();
         }
 
-        public ActionResult InfoAboutBank(Bank bank)
+        public ActionResult EditBank(Guid id)
         {
-            _logic.DeleteBank(bank);
-            return Index();
+            Bank bank = _logic.GetListBank(new Bank { Id = id }).FirstOrDefault();
+            return View("EditBank", bank);
+        }
+        [HttpPost]
+        public ActionResult EditBank(Bank bank)
+        {
+            try
+            {
+                _logic.UpdateBank(bank);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+
+                Exception inner = e.InnerException;
+
+                while (inner != null)
+                {
+                    ModelState.AddModelError(string.Empty, inner.Message);
+                    inner = inner.InnerException;
+                }
+            }
+            return View();
         }
     }
 }

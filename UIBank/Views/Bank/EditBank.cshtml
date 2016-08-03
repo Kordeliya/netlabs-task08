@@ -1,0 +1,54 @@
+﻿@model Entities.Bank
+@{
+    ViewBag.Title = "Редактирование банка";
+}
+
+<div class="title">
+    <h2>@ViewBag.Title</h2>
+</div>
+<br />
+@using (Html.BeginForm()) {
+    <div class="row">
+        <div class="span12">
+            @Html.ValidationSummary(true)
+        </div>
+    </div>
+     @Html.HiddenFor(model => model.Id)
+    <div class="row">
+        <div class="span4 control-group">
+            <div>@Html.LabelFor(model => model.Name)</div>
+            <div>@Html.TextBoxFor(model =>model.Name)</div>
+        </div>
+    </div>
+    <br />
+    <h2>Клиенты банка</h2>
+    <table >
+    <thead>
+        <tr>
+            <th>Имя клиента</th>
+            <th>Дата рождения</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var client in Model.Clients)
+        {
+            <tr>
+                <td>@client.FullName</td>
+                <td>@client.BirthDay</td>
+                <td>
+                    <a style="padding:5px">Удалить</a>
+                    <a style="padding:5px">Изменить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    </table>
+    <br/>
+    <div class="row">
+        <div class="span12 control-group">
+            <button class="btn btn-primary" type="submit" >Сохранить</button>
+            @Html.ActionLink("Назад к списку", "Index", "Bank")
+        </div>
+    </div>
+}

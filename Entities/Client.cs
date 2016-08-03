@@ -13,6 +13,10 @@ namespace Entities
     [Serializable]
     public class Client
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Фамилия

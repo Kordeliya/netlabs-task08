@@ -15,15 +15,10 @@ namespace TestLogic
         [TestMethod]
         public void CheckUpdateBank()
         {
-            Bank oldbank = new Bank
-            {
-                Name = "ВТБ",
-            };
-            Bank newBank = new Bank
-            {
-                Name = "ВТБ24",
-            };
-            Assert.IsTrue(_logic.UpdateBank(oldbank, newBank));
+            var banks = _logic.GetListBank();
+            banks[0].Name = "ВТБ24";
+
+            Assert.IsTrue(_logic.UpdateBank(banks[0]));
 
         }
 
@@ -31,8 +26,8 @@ namespace TestLogic
         public void CheckUpdateClient()
         {
             Client client = _logic.GetListClient(new Client { LastName = "Меркушкин" }).FirstOrDefault();
-            Client newClient = new Client { LastName = "Мерккушкин",FirstName = client.FirstName, MiddleName = client.MiddleName, NameBank = client.NameBank, BirthDay = client.BirthDay };
-            Assert.IsTrue(_logic.UpdateClient(client, newClient));
+            client.LastName = "Мерккушкин";
+            Assert.IsTrue(_logic.UpdateClient(client));
 
         }
 

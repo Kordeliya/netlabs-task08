@@ -38,6 +38,7 @@ namespace DAL
             }
             if (seekingBank != null)
             {
+                client.Id = Guid.NewGuid();
                 seekingBank.Clients.Add(client);
                 WorkerWithXmlFile.Write<Bank>(banks, InputFile);
             }
@@ -69,7 +70,7 @@ namespace DAL
             {
                 throw new RepositoryException("Существует банк с таким названием");
             }
-
+            bank.Id = Guid.NewGuid();
             banks.Add(bank);
             WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
         }
@@ -133,9 +134,16 @@ namespace DAL
         {
             IQueryable<Bank> banks = WorkerWithXmlFile.Read<Bank>(InputFile);
 
-            if (banks != null && filter != null && !String.IsNullOrEmpty(filter.Name))
+            if (banks != null && filter != null)
             {
-                banks = banks.Where(c => c.Name.ToLower().StartsWith(filter.Name.ToLower()));
+                if(filter.Id != null)
+                {
+                    banks = banks.Where(c => c.Id == filter.Id);
+                }
+                if(!String.IsNullOrEmpty(filter.Name))
+                {
+                    banks = banks.Where(c => c.Name.ToLower().StartsWith(filter.Name.ToLower()));
+                }
             }
             return banks != null ? banks.ToList() : null;
         }
@@ -145,7 +153,7 @@ namespace DAL
         /// </summary>
         /// <param name="oldClient"></param>
         /// <param name="newClient"></param>
-        public void UpdateClient(Client oldClient, Client newClient)
+        public void UpdateClient(Client newClient)
         {
             IQueryable<Client> result;
             List<Client> clients = new List<Client>();
@@ -158,24 +166,9 @@ namespace DAL
                     clients.AddRange(bank.Clients);
                 }
                 result = clients.AsQueryable();
-                if (oldClient != null)
+                if (newClient.Id != null)
                 {
-                    if (!String.IsNullOrEmpty(oldClient.LastName))
-                    {
-                        result = result.Where(c => c.LastName.ToLower().StartsWith(oldClient.LastName.ToLower()));
-                    }
-                    if (!String.IsNullOrEmpty(oldClient.FirstName))
-                    {
-                        result = result.Where(c => c.FirstName.ToLower().StartsWith(oldClient.FirstName.ToLower()));
-                    }
-                    if (!String.IsNullOrEmpty(oldClient.MiddleName))
-                    {
-                        result = result.Where(c => c.MiddleName.ToLower().StartsWith(oldClient.MiddleName.ToLower()));
-                    }
-                    if (!String.IsNullOrEmpty(oldClient.NameBank))
-                    {
-                        result = result.Where(c => c.NameBank.ToLower().StartsWith(oldClient.NameBank.ToLower()));
-                    }
+                    result = result.Where(c => c.Id == newClient.Id);
                 }
                 if (result != null)
                 {
@@ -201,29 +194,36 @@ namespace DAL
         /// </summary>
         /// <param name="oldBank"></param>
         /// <param name="newBank"></param>
-        public void UpdateBank(Bank oldBank, Bank newBank)
+        public void UpdateBank(Bank newBank)
         {
             try
             {
-                Bank seekingBank = null;
-                var banks = this.ReadListBank();
-                if (banks != null && banks.Count() > 0)
+                if (newBank != null && newBank.Id != null)
                 {
-                    seekingBank = banks.Where(b => b.Name == oldBank.Name).FirstOrDefault();
-                }
-                else
-                {
-                    banks = new List<Bank>();
-                }
+                    Bank seekingBank = null;
+                    var banks = this.ReadListBank();
+                    if (banks != null && banks.Count() > 0)
+                    {
+                        seekingBank = banks.Where(b => b.Id == newBank.Id).FirstOrDefault();
+                    }
+                    else
+                    {
+                        banks = new List<Bank>();
+                    }
 
-                if (seekingBank != null)
-                {
-                    seekingBank.Name = newBank.Name;
-                    WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
+                    if (seekingBank != null)
+                    {
+                        seekingBank.Name = newBank.Name;
+                        WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
+                    }
+                    else
+                    {
+                        throw new RepositoryException("Не существует указанного банка");
+                    }
                 }
                 else
                 {
-                    throw new RepositoryException("Не существует указанного банка");
+                    throw new RepositoryException("Не верно переданы данные для обновления");
                 }
 
             }
@@ -237,18 +237,34 @@ namespace DAL
         /// Удаление клиента
         /// </summary>
         /// <param name="client"></param>
-        public void DeleteClient(Client client)
+        public void DeleteClient(Guid Id)
         {
-            Bank seekingBank = null;
-            List<Bank> banks = this.ReadListBank().ToList();
-            if (banks.Count() > 0)
+            IQueryable<Client> result;
+            List<Client> clients = new List<Client>();
+            var banks = WorkerWithXmlFile.Read<Bank>(InputFile);
+
+            foreach (var bank in banks)
             {
-                seekingBank = banks.Where(b => b.Name == client.NameBank).FirstOrDefault();
+                clients.AddRange(bank.Clients);
             }
-            if (seekingBank != null)
+            result = clients.AsQueryable();
+            if (Id != null)
             {
-                seekingBank.Clients.Remove(client);
-                WorkerWithXmlFile.Write<Bank>(banks, InputFile);
+                var client = result.FirstOrDefault();
+                if (client != null)
+                {
+                    result.ToList().Remove(client);
+                    WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
+                }
+                else
+                {
+                    throw new RepositoryException("Не существует указанного клиента");
+                }
+
+            }
+            else
+            {
+                throw new RepositoryException("Не передан Идентификатор удаляемого объекта");
             }
         }
 
@@ -256,22 +272,28 @@ namespace DAL
         /// Удаление банка
         /// </summary>
         /// <param name="bank"></param>
-        public void DeleteBank(Bank bank)
+        public void DeleteBank(Guid Id)
         {
             Bank seekingBank = null;
-            List<Bank> banks = this.ReadListBank().ToList();
-            if (banks.Count() > 0)
+            if (Id != null)
             {
-                seekingBank = banks.Where(b => b.Name == bank.Name).FirstOrDefault();
-            }
+                List<Bank> banks = this.ReadListBank().ToList();
+                if (banks.Count() > 0)
+                {
+                    seekingBank = banks.Where(b => b.Id == Id).FirstOrDefault();
+                }
 
-            if (seekingBank == null)
+                if (seekingBank == null)
+                {
+                    throw new RepositoryException("Не существует банк с таким названием");
+                }
+                banks.Remove(seekingBank);
+                WorkerWithXmlFile.Write<Bank>(banks, InputFile);
+            }
+            else
             {
-                throw new RepositoryException("Не существует банк с таким названием");
+                throw new RepositoryException("Не передан Идентификатор удаляемого объекта");
             }
-
-            banks.Remove(bank);
-            WorkerWithXmlFile.Write<Bank>(banks, InputFile);
         }
     }
 }

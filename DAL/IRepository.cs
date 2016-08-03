@@ -38,28 +38,26 @@ namespace DAL
         /// <summary>
         /// Обновление данных клиента
         /// </summary>
-        /// <param name="oldClient"></param>
         /// <param name="newClient"></param>
-        void UpdateClient(Client oldClient, Client newClient);
+        void UpdateClient(Client newClient);
 
         /// <summary>
         /// Обновление списка банка
         /// </summary>
-        /// <param name="oldBank"></param>
         /// <param name="newBank"></param>
-        void UpdateBank(Bank oldBank, Bank newBank);
+        void UpdateBank(Bank newBank);
 
         /// <summary>
         /// Удаление клиента
         /// </summary>
-        /// <param name="client"></param>
-        void DeleteClient(Client client);
+        /// <param name="id"></param>
+        void DeleteClient(Guid id);
 
         /// <summary>
         /// Удаление банка
         /// </summary>
-        /// <param name="bank"></param>
-        void DeleteBank(Bank bank);
+        /// <param name="id"></param>
+        void DeleteBank(Guid id);
 
     }
 }

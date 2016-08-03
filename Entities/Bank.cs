@@ -12,6 +12,10 @@ namespace Entities
     [Serializable]
     public class Bank
     {
+        /// <summary>
+        /// идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Название банка

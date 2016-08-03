@@ -14,6 +14,7 @@ namespace TestLogic
         {
             Bank bank = new Bank
                 {
+                    Id = Guid.NewGuid(),
                     Name = "ВТБ",
                     Clients = new List<Client> { 
                             new Client { LastName="Меркушкин",FirstName="Андрей", MiddleName ="Федорович",
@@ -37,6 +38,7 @@ namespace TestLogic
         {
             Client client = new Client
             {
+                Id=Guid.NewGuid(),
                 LastName = "Авосина",
                 FirstName = "Антонина",
                 MiddleName = "Анатольевна",

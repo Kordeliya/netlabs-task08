@@ -1,10 +1,13 @@
 ﻿@model List<Entities.Bank>
 @{
-    ViewBag.Title = "Систему учета банков";
+    ViewBag.Title = "Список банков";
 }
 
 <h2>@ViewBag.Title</h2>
-<table>
+<br/>
+    @Html.ActionLink("Добавить Банк", "AddBank", "Bank")
+<br/><br/>
+<table >
     <thead>
         <tr>
             <th>Название банка</th>
@@ -14,8 +17,13 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>@item.Name</tr>
-            <tr><a onclick="">Удалить</a><a>Изменить</a></tr>
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a style="padding:5px" href="@Url.Action("DeleteBank", "Bank", new { @id = @item.Id})">Удалить</a>
+                    <a style="padding:5px" href="@Url.Action("EditBank", "Bank", new { @id = @item.Id})">Изменить</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
