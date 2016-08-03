@@ -1,0 +1,22 @@
+﻿@model List<Entities.Bank>
+@{
+    ViewBag.Title = "Систему учета банков";
+}
+
+<h2>@ViewBag.Title</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Название банка</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>@item.Name</tr>
+            <tr><a onclick="">Удалить</a><a>Изменить</a></tr>
+        }
+    </tbody>
+</table>
+
