@@ -46,7 +46,7 @@ namespace TestLogic
                 NameBank = "ВТБ"
 
             };
-            bool result = _logic.AddNewClient(client);
+            bool result = _logic.AddNewClient(client,new Guid(""));
             Assert.IsTrue(result);
         }
         

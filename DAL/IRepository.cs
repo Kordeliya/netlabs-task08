@@ -13,7 +13,8 @@ namespace DAL
         /// Создание нового клиента
         /// </summary>
         /// <param name="client"></param>
-        void CreateNewClient(Client client);
+        /// /// <param name="idBank"></param>
+        void CreateNewClient(Client client, Guid idBank);
 
         /// <summary>
         /// Создание нового банка

@@ -36,6 +36,7 @@ namespace UIBank.Controllers
         {
             try
             {
+                model.Clients = new List<Client>();
                 _logic.AddNewBank(model);
                 return RedirectToAction("Index");
             }
@@ -53,6 +54,37 @@ namespace UIBank.Controllers
             }
             return View();
         }
+
+        [HttpGet]
+        public ActionResult AddClient(string idBank)
+        {
+            ViewBag.IdBank = idBank;
+            return View(new Client());
+        }
+
+        [HttpPost]
+        public ActionResult AddClient(Client model, string idBank)
+        {
+            try
+            {
+                _logic.AddNewClient(model,new Guid(idBank));
+                return RedirectToAction("EditBank", new { id = new Guid(idBank)});
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
+
+                Exception inner = e.InnerException;
+
+                while (inner != null)
+                {
+                    ModelState.AddModelError(string.Empty, inner.Message);
+                    inner = inner.InnerException;
+                }
+            }
+            return View();
+        }
+
         public ActionResult DeleteBank(Guid id)
         {
             _logic.DeleteBank(id);

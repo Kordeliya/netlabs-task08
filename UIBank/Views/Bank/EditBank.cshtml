@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Редактирование банка";
 }
-
+@{var _idBank = Model.Id.ToString();}
 <div class="title">
     <h2>@ViewBag.Title</h2>
 </div>
@@ -22,6 +22,8 @@
     </div>
     <br />
     <h2>Клиенты банка</h2>
+    <br />
+       @Html.ActionLink("Добавить Клиента", "AddClient", "Bank", new {idBank = _idBank}, null)
     <table >
     <thead>
         <tr>

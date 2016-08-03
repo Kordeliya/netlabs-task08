@@ -39,12 +39,13 @@ namespace BuisnessLogic
         /// Добавление банковского клиента
         /// </summary>
         /// <param name="client">клиент</param>
+        /// /// <param name="idBank">идентификатор банка</param>
         /// <returns></returns>
-        public bool AddNewClient(Client client)
+        public bool AddNewClient(Client client, Guid idBank)
         {
             try
             {
-                _repository.CreateNewClient(client);
+                _repository.CreateNewClient(client, idBank);
                 return true;
             }
             catch (RepositoryException ex)
@@ -60,9 +61,9 @@ namespace BuisnessLogic
         /// <returns></returns>
         public List<Bank> GetListBank(Bank filter = default(Bank))
         {
-            List<Bank> result = new List<Bank>();
-            result = _repository.ReadListBank(filter).ToList();
-            return result;
+            
+            var result = _repository.ReadListBank(filter);
+            return result != null ? result.ToList() : null;
         }
 
         /// <summary>
@@ -72,9 +73,9 @@ namespace BuisnessLogic
         /// <returns></returns>
         public List<Client> GetListClient(Client filter = default(Client))
         {
-            List<Client> result = new List<Client>();
-            result = _repository.ReadListClient(filter).ToList();
-            return result;
+            var result = _repository.ReadListClient(filter);
+            return result!= null ? result.ToList() : null;
+
         }
 
         /// <summary>

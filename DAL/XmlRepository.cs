@@ -27,18 +27,19 @@ namespace DAL
         /// Создание нового клиента
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="bank"></param>
-        public void CreateNewClient(Client client)
+        /// <param name="idBank"></param>
+        public void CreateNewClient(Client client, Guid idBank)
         {
             Bank seekingBank = null;
             List<Bank> banks = this.ReadListBank().ToList();
             if (banks.Count() > 0)
             {
-                seekingBank = banks.Where(b => b.Name == client.NameBank).FirstOrDefault();
+                seekingBank = banks.Where(b => b.Id == idBank).FirstOrDefault();
             }
             if (seekingBank != null)
             {
                 client.Id = Guid.NewGuid();
+                client.NameBank = seekingBank.Name;
                 seekingBank.Clients.Add(client);
                 WorkerWithXmlFile.Write<Bank>(banks, InputFile);
             }

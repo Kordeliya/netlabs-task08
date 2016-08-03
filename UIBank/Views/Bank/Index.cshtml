@@ -15,15 +15,18 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if(Model != null)
         {
-            <tr>
-                <td>@item.Name</td>
-                <td>
-                    <a style="padding:5px" href="@Url.Action("DeleteBank", "Bank", new { @id = @item.Id})">Удалить</a>
-                    <a style="padding:5px" href="@Url.Action("EditBank", "Bank", new { @id = @item.Id})">Изменить</a>
-                </td>
-            </tr>
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <a style="padding:5px" href="@Url.Action("DeleteBank", "Bank", new { @id = @item.Id})">Удалить</a>
+                        <a style="padding:5px" href="@Url.Action("EditBank", "Bank", new { @id = @item.Id})">Изменить</a>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

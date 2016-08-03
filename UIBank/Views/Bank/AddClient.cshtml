@@ -1,0 +1,55 @@
+﻿@model Entities.Client
+@{
+    ViewBag.Title = "Добавление нового клиента";
+}
+<script language="javascript">
+    $(document).ready(function () {
+        $('#datepicker').datepicker();
+    });
+</script>
+@{var idBank = ViewBag.IdBank;}
+<div class="title">
+    <h2>@ViewBag.Title</h2>
+</div>
+<br />
+@using (Html.BeginForm()) {
+    <div class="row">
+        <div class="span12">
+            @Html.ValidationSummary(true)
+        </div>
+    </div>
+    <input type="hidden" name="idBank" value="@idBank" />
+    <div class="row">
+        <div class="span4 control-group">
+            <div>@Html.LabelFor(model => model.LastName)</div>
+            <div>@Html.TextBoxFor(model =>model.LastName)</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4 control-group">
+            <div>@Html.LabelFor(model => model.FirstName)</div>
+            <div>@Html.TextBoxFor(model =>model.FirstName)</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4 control-group">
+            <div>@Html.LabelFor(model => model.MiddleName)</div>
+            <div>@Html.TextBoxFor(model =>model.MiddleName)</div>
+        </div>
+    </div>
+        <div class="row">
+        <div class="span4 control-group">
+            <div>@Html.LabelFor(model => model.BirthDay)</div>
+            <div>@Html.Editor(Model.BirthDay.ToString(), new { htmlAttributes = new { @class = "form-control", @id = "datepicker" } })</div>
+        </div>
+    </div>
+    
+    <br/>
+    <div class="row">
+        <div class="span12 control-group">
+            <button class="btn btn-primary" type="submit">Сохранить</button>
+            @Html.ActionLink("Назад", "EditBank", "Bank", new { id = new Guid(idBank)}, null)
+        </div>
+    </div>
+}
+
