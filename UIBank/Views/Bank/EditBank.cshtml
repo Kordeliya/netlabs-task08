@@ -4,7 +4,7 @@
 }
 @{var _idBank = Model.Id.ToString();}
 <div class="title">
-    <h2>@ViewBag.Title</h2>
+    <h1>@ViewBag.Title</h1>
 </div>
 <br />
 @using (Html.BeginForm()) {
@@ -20,11 +20,20 @@
             <div>@Html.TextBoxFor(model =>model.Name)</div>
         </div>
     </div>
+    <br/>
+    <div class="row">
+        <div class="span12 control-group">
+            <button class="btn btn-primary" type="submit" >Сохранить</button>
+            @Html.ActionLink("Назад к списку", "Index", "Bank", new {@class= "btn btn-warning"})
+        </div>
+    </div>
+}
     <br />
     <h2>Клиенты банка</h2>
     <br />
-       @Html.ActionLink("Добавить Клиента", "AddClient", "Bank", new {idBank = _idBank}, null)
-    <table >
+    @Html.ActionLink("Добавить Клиента", "AddClient", "Bank", new { idBank = _idBank }, new {@class="btn btn-default" })
+    <br/><br/>
+    <table class="table" style="width:70%; font-size:1.5em">
     <thead>
         <tr>
             <th>Имя клиента</th>
@@ -37,20 +46,12 @@
         {
             <tr>
                 <td>@client.FullName</td>
-                <td>@client.BirthDay</td>
+                <td>@client.BirthDay.ToShortDateString()</td>
                 <td>
-                    <a style="padding:5px">Удалить</a>
-                    <a style="padding:5px">Изменить</a>
-                </td>
+                        <a style="padding:5px" href="@Url.Action("DeleteClient", "Bank", new { @id = @client.Id, @idBank = _idBank}, null)">Удалить</a>
+                        <a style="padding:5px" href="@Url.Action("EditClient", "Bank", new { @id = @client.Id, @idBank = _idBank}, null)">Изменить</a>
+                    </td>
             </tr>
         }
     </tbody>
     </table>
-    <br/>
-    <div class="row">
-        <div class="span12 control-group">
-            <button class="btn btn-primary" type="submit" >Сохранить</button>
-            @Html.ActionLink("Назад к списку", "Index", "Bank")
-        </div>
-    </div>
-}

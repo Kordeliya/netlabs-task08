@@ -3,11 +3,11 @@
     ViewBag.Title = "Список банков";
 }
 
-<h2>@ViewBag.Title</h2>
+<h1>@ViewBag.Title</h1>
 <br/>
-    @Html.ActionLink("Добавить Банк", "AddBank", "Bank")
+    @Html.ActionLink("Добавить Банк", "AddBank", "Bank", null ,new { @class = "btn btn-default" })
 <br/><br/>
-<table >
+<table class="table" style="width:50%; font-size:1.5em">
     <thead>
         <tr>
             <th>Название банка</th>

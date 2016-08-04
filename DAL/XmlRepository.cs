@@ -182,6 +182,7 @@ namespace DAL
                         client.NameBank = newClient.NameBank;
                         client.BirthDay = newClient.BirthDay;
                     }
+                    WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
                 }
             }
             catch (Exception)
@@ -238,7 +239,7 @@ namespace DAL
         /// Удаление клиента
         /// </summary>
         /// <param name="client"></param>
-        public void DeleteClient(Guid Id)
+        public void DeleteClient(Guid id)
         {
             IQueryable<Client> result;
             List<Client> clients = new List<Client>();
@@ -249,9 +250,9 @@ namespace DAL
                 clients.AddRange(bank.Clients);
             }
             result = clients.AsQueryable();
-            if (Id != null)
+            if (id != null)
             {
-                var client = result.FirstOrDefault();
+                var client = result.Where(c=>c.Id==id).FirstOrDefault();
                 if (client != null)
                 {
                     result.ToList().Remove(client);
@@ -261,7 +262,6 @@ namespace DAL
                 {
                     throw new RepositoryException("Не существует указанного клиента");
                 }
-
             }
             else
             {

@@ -12,27 +12,18 @@ namespace BuisnessLogic
     {
         IRepository _repository;
 
-        public LogicBankSystem(string file)
+        public LogicBankSystem(IRepository repository)
         {
-            _repository = new XmlRepository(file);
+            _repository = repository;
         }
 
         /// <summary>
         /// Добавление нового банка
         /// </summary>
         /// <param name="bank">банк</param>
-        /// <returns></returns>
-        public bool AddNewBank(Bank bank)
+        public void AddNewBank(Bank bank)
         {
-            try
-            {
-                _repository.CreateNewBank(bank);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.CreateNewBank(bank);
         }
 
         /// <summary>
@@ -40,18 +31,9 @@ namespace BuisnessLogic
         /// </summary>
         /// <param name="client">клиент</param>
         /// /// <param name="idBank">идентификатор банка</param>
-        /// <returns></returns>
-        public bool AddNewClient(Client client, Guid idBank)
+        public void AddNewClient(Client client, Guid idBank)
         {
-            try
-            {
-                _repository.CreateNewClient(client, idBank);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.CreateNewClient(client, idBank);
         }
 
         /// <summary>
@@ -82,72 +64,36 @@ namespace BuisnessLogic
         /// Удаление банка
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
-        public bool DeleteBank(Guid id)
+        public void DeleteBank(Guid id)
         {
-            try
-            {
-                _repository.DeleteBank(id);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.DeleteBank(id);
         }
 
         /// <summary>
         /// Удаление клиента
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
-        public bool DeleteClient(Guid id)
+        public void DeleteClient(Guid id)
         {
-            try
-            {
-                _repository.DeleteClient(id);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.DeleteClient(id);
         }
 
         /// <summary>
         /// Обновление банка
         /// </summary>
         /// <param name="newBank"></param>
-        /// <returns></returns>
-        public bool UpdateBank(Bank newBank)
+        public void UpdateBank(Bank newBank)
         {
-            try
-            {
-                _repository.UpdateBank(newBank);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.UpdateBank(newBank);
         }
 
         /// <summary>
         /// Обновление клиента
         /// </summary>
         /// <param name="newClient"></param>
-        /// <returns></returns>
-        public bool UpdateClient(Client newClient)
+        public void UpdateClient(Client newClient)
         {
-            try
-            {
-                _repository.UpdateClient(newClient);
-                return true;
-            }
-            catch (RepositoryException ex)
-            {
-                return false;
-            }
+            _repository.UpdateClient(newClient);
         }
 
 

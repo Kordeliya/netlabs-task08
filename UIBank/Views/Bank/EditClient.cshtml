@@ -1,6 +1,6 @@
 ﻿@model Entities.Client
 @{
-    ViewBag.Title = "Добавление нового клиента";
+    ViewBag.Title = "Редактирование клиента";
 }
 <script language="javascript">
     $(document).ready(function () {
@@ -19,6 +19,7 @@
         </div>
     </div>
     <input type="hidden" name="idBank" value="@idBank" />
+    @Html.HiddenFor(model => model.Id);
     <div class="row">
         <div class="span4 control-group">
             <div>@Html.LabelFor(model => model.LastName)</div>
@@ -43,8 +44,6 @@
             <div>
                 <input type="date" id="BirthDay" name="BirthDay" class="form-control" style="width: 200px" />
             </div>
-            @*<div>@Html.LabelFor(model => model.BirthDay)</div>
-            <div>@Html.Editor(Model.BirthDay.ToString(), new { htmlAttributes = new { @class = "form-control", @id = "datepicker" } })</div>*@
         </div>
     </div>
     

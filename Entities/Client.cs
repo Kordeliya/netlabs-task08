@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,21 +18,25 @@ namespace Entities
         /// <summary>
         /// Идентификатор
         /// </summary>
+        [ReadOnly(true)]
         public Guid Id { get; set; }
 
         /// <summary>
         /// Фамилия
         /// </summary>
+        [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 
         /// <summary>
         /// Имя
         /// </summary>
+        [Display(Name = "Имя")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Отчество
         /// </summary>
+        [Display(Name = "Отчество")]
         public string MiddleName { get; set; }
 
         /// <summary>
@@ -48,11 +54,13 @@ namespace Entities
         /// <summary>
         /// Дата рождения
         /// </summary>
+        [Display(Name="Дата Рождения")]
         public DateTime BirthDay { get; set; }
 
         /// <summary>
         /// Название банка
         /// </summary>
+        [ReadOnly(true)]
         public string NameBank { get; set; }
     }
 }
