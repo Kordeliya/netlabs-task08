@@ -152,7 +152,6 @@ namespace DAL
         /// <summary>
         /// Обновление данных о клиенте
         /// </summary>
-        /// <param name="oldClient"></param>
         /// <param name="newClient"></param>
         public void UpdateClient(Client newClient)
         {
@@ -194,7 +193,6 @@ namespace DAL
         /// <summary>
         /// Обновление данных о Банке
         /// </summary>
-        /// <param name="oldBank"></param>
         /// <param name="newBank"></param>
         public void UpdateBank(Bank newBank)
         {
@@ -238,42 +236,29 @@ namespace DAL
         /// <summary>
         /// Удаление клиента
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="id"></param>
         public void DeleteClient(Guid id)
         {
             List<Client> clients = null;
             var banks = WorkerWithXmlFile.Read<Bank>(InputFile);
-
-            foreach (var bank in banks)
-            {
-                if (clients == null)
-                {
-                    clients = bank.Clients;
-                }
-                else
-                {
-                    clients.AddRange(bank.Clients);
-                }
-            }
             if (id != null)
             {
-                var client = clients.Where(c=>c.Id==id).FirstOrDefault();
-                if (client != null)
+                if (banks != null)
                 {
                     foreach (var bank in banks)
                     {
-                        var inbank = bank.Clients.Where(c => c.Id == client.Id).FirstOrDefault();
-                        if (inbank != null)
+                        var client = bank.Clients.Where(c => c.Id == id).FirstOrDefault();
+                        if (client != null)
                         {
                             bank.Clients.Remove(client);
+                            WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
                             break;
                         }
                     }
-                    WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
                 }
                 else
                 {
-                    throw new RepositoryException("Не существует указанного клиента");
+                    throw new RepositoryException("Нет списка банков");
                 }
             }
             else
@@ -285,16 +270,16 @@ namespace DAL
         /// <summary>
         /// Удаление банка
         /// </summary>
-        /// <param name="bank"></param>
-        public void DeleteBank(Guid Id)
+        /// <param name="id"></param>
+        public void DeleteBank(Guid id)
         {
             Bank seekingBank = null;
-            if (Id != null)
+            if (id != null)
             {
                 List<Bank> banks = this.ReadListBank().ToList();
                 if (banks.Count() > 0)
                 {
-                    seekingBank = banks.Where(b => b.Id == Id).FirstOrDefault();
+                    seekingBank = banks.Where(b => b.Id == id).FirstOrDefault();
                 }
 
                 if (seekingBank == null)

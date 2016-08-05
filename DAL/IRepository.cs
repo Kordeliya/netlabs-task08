@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
+    /// <summary>
+    /// Контракт репозитория
+    /// </summary>
     public interface IRepository
     {
         /// <summary>

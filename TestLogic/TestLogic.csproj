@@ -60,6 +60,10 @@
       <Project>{73e0b98c-183e-4909-ae77-60f3fd6395be}</Project>
       <Name>BuisnessLogic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{f44e8deb-2e65-462c-9810-e5fc02458656}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{febb88d1-1291-4da1-9d35-cef3ddfa7f0a}</Project>
       <Name>Entities</Name>

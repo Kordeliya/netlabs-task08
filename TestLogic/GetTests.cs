@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using DAL;
+using Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace TestLogic
     [TestClass]
     public class GetTests
     {
-        BuisnessLogic.LogicBankSystem _logic = new BuisnessLogic.LogicBankSystem("D:/input.xml");
+        BuisnessLogic.LogicBankSystem _logic = new BuisnessLogic.LogicBankSystem(new XmlRepository("D:/input.xml"));
         [TestMethod]
         public void CheckGetListBanks()
         {

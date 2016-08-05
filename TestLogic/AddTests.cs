@@ -2,13 +2,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Entities;
 using System.Collections.Generic;
+using DAL;
 
 namespace TestLogic
 {
     [TestClass]
     public class AddTests
     {
-        BuisnessLogic.LogicBankSystem _logic = new BuisnessLogic.LogicBankSystem("D:/input.xml");
+        BuisnessLogic.LogicBankSystem _logic = new BuisnessLogic.LogicBankSystem(new XmlRepository("D:/input.xml"));
         [TestMethod]
         public void CheckAddBank()
         {
@@ -27,8 +28,8 @@ namespace TestLogic
                                         BirthDay=new DateTime(1993,6,17), NameBank="Сбербанк"}
                         }
                 };
-            bool result = _logic.AddNewBank(bank);
-            Assert.IsTrue(result);
+            _logic.AddNewBank(bank);
+            //Assert.IsTrue(result);
 
 
         }
@@ -46,7 +47,7 @@ namespace TestLogic
                 NameBank = "ВТБ"
 
             };
-            bool result = _logic.AddNewClient(client,new Guid(""));
+            bool result = _logic.AddNewClient(client,);
             Assert.IsTrue(result);
         }
         

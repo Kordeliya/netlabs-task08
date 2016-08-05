@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
+    /// <summary>
+    /// Исключения при работе с репозиторием
+    /// </summary>
     [Serializable]
     public class RepositoryException: Exception
     {
