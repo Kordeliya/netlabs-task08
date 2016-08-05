@@ -241,21 +241,34 @@ namespace DAL
         /// <param name="client"></param>
         public void DeleteClient(Guid id)
         {
-            IQueryable<Client> result;
-            List<Client> clients = new List<Client>();
+            List<Client> clients = null;
             var banks = WorkerWithXmlFile.Read<Bank>(InputFile);
 
             foreach (var bank in banks)
             {
-                clients.AddRange(bank.Clients);
+                if (clients == null)
+                {
+                    clients = bank.Clients;
+                }
+                else
+                {
+                    clients.AddRange(bank.Clients);
+                }
             }
-            result = clients.AsQueryable();
             if (id != null)
             {
-                var client = result.Where(c=>c.Id==id).FirstOrDefault();
+                var client = clients.Where(c=>c.Id==id).FirstOrDefault();
                 if (client != null)
                 {
-                    result.ToList().Remove(client);
+                    foreach (var bank in banks)
+                    {
+                        var inbank = bank.Clients.Where(c => c.Id == client.Id).FirstOrDefault();
+                        if (inbank != null)
+                        {
+                            bank.Clients.Remove(client);
+                            break;
+                        }
+                    }
                     WorkerWithXmlFile.Write<Bank>(banks.ToList(), InputFile);
                 }
                 else
